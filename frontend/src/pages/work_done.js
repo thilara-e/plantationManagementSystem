@@ -79,25 +79,36 @@ class Register extends Component{
   }
 
   handleLoad = async(e) => {
-    //localStorage.setItem('laborerUpdate', this.state.phoneNo);
     const date = this.getDate();
-    this.setState({Ready:true});
+    // this.setState({Ready:true});
+    if(this.state.labourer_id.length != 10){
+      alert("Invalid ID Format");
+      this.setState({Ready:false});
+    }
+    
+    else{
+      this.setState({Ready:true})
     axios.get('http://localhost:8000/api/workDone/load/'+this.state.labourer_id).then(response =>{
-      
       console.log(response.data);
       this.setState({labourer_id:response.data['lMobile']});
-      //this.setState({date:response.data[0]['date']});
       this.setState({work_assignmt:response.data['description']});
+       if(!response.data['description']){
+        this.setState({Ready:false});
+         alert("Labourer doesn't exists");
+       }
       this.setState({field:response.data['fieldID']});
       this.setState({amount:response.data['amount']});
       this.setState({status:response.data['status']});
-     console.log(date);
-     console.log(response.data);
+     console.log(this.state.work_assignmt);
+
+     
     }).catch(function(error){
       console.log(error);
        })
 
+      } 
        
+      
   }
 
 

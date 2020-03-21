@@ -111,7 +111,7 @@ export default class OfficerPay extends Component {
       }
     }).then(function (response) {
       console.log(response)
-      alert(response.data);
+      alert("Successfully inserted");
     }).catch(function (error) {
       console.log(error)
       alert("Laborer insertion failed" + "\n"+ error);

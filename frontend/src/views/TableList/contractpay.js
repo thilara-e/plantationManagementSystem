@@ -83,7 +83,7 @@ export default class ContractPay extends Component {
         url: 'http://localhost:8000/api/expenses/insert',
         data: {
           divExpenseID:labourer.divExpenseID,
-          divNo: "div1",
+          divNo:  localStorage.getItem('currentUserDivision'),
           expenseID: "2",
           descriptions:labourer.descriptions,
           date: this.getDate(),
@@ -94,18 +94,13 @@ export default class ContractPay extends Component {
     }))
     .then(function (response) {
       console.log(response)
-      alert(response.data);
+      alert("Successfully inserted");
     }).catch(function (error) {
       console.log(error)
       alert("Laborer insertion failed" + "\n"+ error);
     });
 
-    labourers.forEach((labourer) => {
-      firebase.database().ref("Contract_advance").child(date).child(division).child(labourer.descriptions).update({
-        amount: labourer.amount
-      });
-    })
-  }
+     }
 
 
   getDate = () => {

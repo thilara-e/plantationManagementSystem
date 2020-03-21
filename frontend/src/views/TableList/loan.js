@@ -103,7 +103,7 @@ export default class Loan extends Component {
         url: 'http://localhost:8000/api/expenses/insert',
         data: {
           divExpenseID:labourer.divExpenseID,
-          divNo: "div1",
+          divNo: localStorage.getItem('currentUserDivision'),
           expenseID: "3",
           descriptions:labourer.descriptions,
           date: this.getDate(),
@@ -114,7 +114,7 @@ export default class Loan extends Component {
     }))
     .then(function (response) {
       console.log(response)
-      alert(response.data);
+      alert("Successfully inserted");
     }).catch(function (error) {
       console.log(error)
       alert("Laborer insertion failed" + "\n"+ error);

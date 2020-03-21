@@ -103,7 +103,7 @@ export default class OfficerPay extends Component {
         url: 'http://localhost:8000/api/expenses/insert',
         data: {
           divExpenseID:officer.divExpenseID,
-          divNo: "div1",
+          divNo: "None",
           expenseID: "4",
           descriptions:officer.descriptions,
           date: this.getDate(),
@@ -114,7 +114,7 @@ export default class OfficerPay extends Component {
     }))
     .then(function (response) {
       console.log(response)
-      alert(response.data);
+      alert("Successfully Inserted");
     }).catch(function (error) {
       console.log(error)
       alert("Laborer insertion failed" + "\n"+ error);

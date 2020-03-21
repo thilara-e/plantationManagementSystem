@@ -80,7 +80,7 @@ export default class AdvancePay extends Component {
         method: 'post',
         url: 'http://localhost:8000/api/expenses/insert',
         data: {
-          divNo: "div1",
+          divNo: localStorage.getItem('currentUserDivision'),
           expenseID:"1",
           descriptions:labourer.descriptions,
           date: this.getDate(),
@@ -93,29 +93,13 @@ export default class AdvancePay extends Component {
     
     .then(function (response) {
       console.log(response)
-      alert(response.data);
+      alert("Successfully inserted");
     }).catch(function (error) {
       console.log(error)
       alert("Laborer insertion failed" + "\n"+ error);
     });
 
-    labourers.forEach((labourer) => {
-      firebase.database().ref("Weekly_advance").child(date).child(division).child(labourer.descriptions).update({
-        amount: labourer.amount
-      });
-    })
-
-    if(labourers.descriptions == null || labourers.amount == null){
-      alert("Complete all details");
-      window.location.reload();
-    }
-    else if((labourers.descriptions).length !=10){
-      alert("Pnone number has 10 characters");
-      window.location.reload();
-    }
-    else{
-      alert("Successfully added");
-    }
+   
   }
 
 
