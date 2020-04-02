@@ -2,7 +2,7 @@ import {
   blackColor,
   whiteColor,
   hexToRgb
-} from "assets/jss/material-dashboard-react.jsx";
+} from "../../../../assets/jss/material-dashboard-react.jsx";
 
 const cardStyle = {
   card: {
@@ -12,6 +12,7 @@ const cardStyle = {
     borderRadius: "6px",
     color: blackColor,
     background: whiteColor,
+      opacity: ".9",
     width: "100%",
     boxShadow: "0 1px 4px 0 rgba(" + hexToRgb(blackColor) + ", 0.14)",
     position: "relative",
