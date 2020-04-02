@@ -12,7 +12,7 @@ import DailyWorkPage from "./views/ConductorDailyWork/ConductorDailyWork.jsx";
 import UserProfile from "./views/UserProfile/UserProfile.jsx";
 import TableList from "./views/TableList/TableList.jsx";
 import Typography from "./views/Typography/Typography.jsx";
-import Icons from "views/Icons/Icons.jsx";
+import Icons from "./views/Icons/Icons.jsx";
 import Conductor7Day from "./views/Conductor7Day/Conductor7Day.jsx";
 import Maps from "./views/Maps/Maps.jsx";
 import NotificationsPage from "./views/Notifications/Notifications.jsx";

@@ -18,7 +18,7 @@
     "bootstrap": "^4.3.1",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
-    "firebase": "^7.0.0",
+    "firebase": "^7.13.1",
     "history": "4.7.2",
     "jquery": "^1.9.1",
     "material-ui-next-responsive-table": "^0.5.1",
