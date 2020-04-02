@@ -8,32 +8,19 @@
 ```
 npm install
 ```
-3.install mysql package using the command of,
-```
-npm install -s mysql
 
-4. open and edit the db configuration file at 'backend/src/config/db.config.js' according to your settings.
+3. open and edit the db configuration file at 'backend/src/config/db.config.js' according to your settings.
 
-5. after that go to root folder again and execute,
+4. after that go to root folder again and execute,
 ```
 npm start
 ```
 [if you use nodemon(suggest to use), 'nodemon start']
 
-6. now backend will run and listen to 'localhost:8000' port
+5. now backend will run and listen to 'localhost:8000' port
 
-7. you can check and test the backend application using 'Postman tool' or that kind of tools.
 
-8. then execute,
-```
-npm start
-```
 
-9. go to add laborer form from browser. submit button will send a hardcoded post request to db. go to delete form and the submit button in that form will send a hardcoded delete request to db for previously created record.
-
-10. react codes for post(for create record) and put(for update record) request sending are same way. and also react codes for get and delete request sending are same way.
-
-12. you have to set the data variables, then, catch functions as you want.
 
 
 ## Backend Application
