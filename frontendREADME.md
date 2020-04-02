@@ -6,22 +6,10 @@
 ```
 npm install
 ```
-2.install 'axios' package using the command of,
+2.Then star the project frontend ,
 ```
-npm install -s axios
+npm start
 ```
-(it handles the http request sending and receiving to React.)
-
-3.Install @lls/react-light-calendar via npm :
-```
-npm install --save @lls/react-light-calendar
-```
-
-4.Install react-datepicker via npm :
-```
-npm install --save react-datepicker
-```
-
 ## Frontend Application
 
 
