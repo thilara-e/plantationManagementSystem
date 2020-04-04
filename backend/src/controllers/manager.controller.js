@@ -78,8 +78,12 @@ ManagerController.prototype.insertManager = function(reqBody, callback) {
       reqBody.managerMobile,
       reqBody.managerDOB,
       reqBody.managerAddress,
-      reqBody.managerStatus
+      reqBody.managerStatus,
+      reqBody.managerUsername,
+      reqBody.managerPassword
     );
+
+    console.log(manager);
 
     var sqlQuery = sqlGenerator.insertManager(manager);
 
@@ -100,6 +104,7 @@ ManagerController.prototype.insertManager = function(reqBody, callback) {
     });
   });
 };
+
 
 // Update laborer in DB
 // LaborerController.prototype.updateLaborer = function(reqBody, callback) {

@@ -126,18 +126,19 @@ SqlGenerator.prototype.updateField = function(field) { console.log("sql query");
 
 
 
-
 // Insert manager query
 // *** input param should be a Manager Object (in js cannot define type)
 SqlGenerator.prototype.insertManager = function(staff) {
-  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus) VALUES (" + 
+  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus,username,password) VALUES (" + 
     "'" + staff.nic + "', " +
     "'" + staff.position + "', " +
     "'" + staff.name + "', " +
     "'" + staff.mobile + "', " +
     "'" + staff.dob + "', " +
     "'" + staff.address + "', " +
-    "'" + staff.status + "')";
+    "'" + staff.status + "', " +
+    "'" + staff.username + "', " +
+    "'" + staff.password + "')";
 console.log("sql generator ");
     // *** use a console.log to view query before do other things.
     console.log(query);
@@ -147,14 +148,16 @@ console.log("sql generator ");
 // Insert clerk query
 // *** input param should be a Manager Object (in js cannot define type)
 SqlGenerator.prototype.insertClerk = function(staff) {
-  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus) VALUES (" + 
+  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus,username,password) VALUES (" + 
     "'" + staff.nic + "', " +
     "'" + staff.position + "', " +
     "'" + staff.name + "', " +
     "'" + staff.mobile + "', " +
     "'" + staff.dob + "', " +
     "'" + staff.address + "', " +
-    "'" + staff.status + "')";
+    "'" + staff.status + "', " +
+    "'" + staff.username + "', " +
+    "'" + staff.password + "')";
 console.log("sql generator ");
     // *** use a console.log to view query before do other things.
     console.log(query);
@@ -164,16 +167,19 @@ console.log("sql generator ");
 // Insert conductor query
 // *** input param should be a Conductor Object (in js cannot define type)
 SqlGenerator.prototype.insertConductortostaff = function(staff) {
-  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus) VALUES (" + 
+  console.log("sql generator");
+  var query = "INSERT INTO staff (sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus,username,password) VALUES (" + 
     "'" + staff.nic + "', " +
     "'" + staff.position + "', " +
     "'" + staff.name + "', " +
     "'" + staff.mobile + "', " +
     "'" + staff.dob + "', " +
     "'" + staff.address + "', " +
-    "'" + staff.status + "')";
+    "'" + staff.status + "', " +
+    "'" + "div1@gmail.com" + "', " +
+    "'" + "1e10adc3949ba59abbe56e057f20f883e" + "')";
     
-console.log("sql generator ");
+console.log("sql generator staff");
     // *** use a console.log to view query before do other things.
     console.log(query);
   return query;
@@ -190,7 +196,7 @@ SqlGenerator.prototype.insertConductortoconductor = function(conductor) {
     // "'" + staff.address + "', " +
     "'" + conductor.divno + "')";
     
-console.log("sql generator ");
+console.log("sql generator conductor ");
     // *** use a console.log to view query before do other things.
     console.log(query);
   return query;

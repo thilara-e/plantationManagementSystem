@@ -110,7 +110,7 @@ ConductorController.prototype.insertConductortostaff = function(reqBody, callbac
 };
 
 // Insert conductor to DB
-ConductorController.prototype.insertConductortoconductor = function(reqBody, callback) {
+ConductorController.prototype.insertConductor = function(reqBody, callback) {
 console.log("controlller insert");
 connection.beginTransaction(function(err) {
   if (err) {
@@ -120,16 +120,69 @@ connection.beginTransaction(function(err) {
   // *** request should contain below keys exactly as it is.
   var conductor = new Conductor(
     reqBody.conductorNIC,
-      
+    'null',
+    'null',
+    'null',
+    'null',
+    'null',
+    'null',
+    'null',
     reqBody.conductorDivNo
   );
-  console.log("var conductor");
-  var sqlQuery = sqlGenerator.insertConductortoconductor(conductor);
 
-  sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
+  var staff = new Manager(
+    
+      reqBody.conductorNIC,
+      reqBody.conductorPosition,
+      reqBody.conductorName,
+      reqBody.conductorMobile,
+      reqBody.conductorDOB,
+      reqBody.conductorAddress,
+      reqBody.conductorStatus,
+      'div1@gmail.com' ,
+      'e10adc3949ba59abbe56e057f20f883e'
+
+  );
+
+
+  console.log(conductor);
+  console.log(staff);
+ 
+   var sqlQuery = sqlGenerator.insertConductortoconductor(conductor);
+
+  //  var sqlQuery = sqlGenerator.insertConductortostaff(staff);
+
+console.log(sqlQuery);
+  sqlGenerator.executeSql(connection, sqlQuery, function(result, err) { 
     if (err) {
+      console.log(err);
+      
       connection.rollback();
-      callback(null, err);
+      callback(null, err);     
+    } else {
+      connection.commit(function(err) {
+        if (err) {
+          connection.rollback();
+          callback(null, err);
+        }
+        console.log("Transaction Complete.");
+        //callback("Conductor successfully inserted into the system!");
+      });
+    }
+  }
+  
+  
+  );
+
+  var sqlQuery = sqlGenerator.insertConductortostaff(staff);
+
+  console.log(sqlQuery);
+  sqlGenerator.executeSql(connection, sqlQuery, function(result, err) { 
+    if (err) {
+      console.log(err);
+      
+      connection.rollback();
+      callback(null, err);     
     } else {
       connection.commit(function(err) {
         if (err) {
@@ -140,14 +193,12 @@ connection.beginTransaction(function(err) {
         callback("Conductor successfully inserted into the system!");
       });
     }
-  }
-  
-  );
-
+  });
 
 
 });
 };
+
 
 
 

@@ -121,7 +121,9 @@ ClerkController.prototype.insertClerk = function(reqBody, callback) {
       reqBody.clerkMobile,
       reqBody.clerkDOB,
       reqBody.clerkAddress,
-      reqBody.clerkStatus
+      reqBody.clerkStatus,
+      reqBody.clerkUsername,
+      reqBody.clerkPassword,
     );
 
     var sqlQuery = sqlGenerator.insertClerk(clerk);
@@ -143,8 +145,6 @@ ClerkController.prototype.insertClerk = function(reqBody, callback) {
     });
   });
 };
-
-
 
 // Update laborer in DB
 // LaborerController.prototype.updateLaborer = function(reqBody, callback) {

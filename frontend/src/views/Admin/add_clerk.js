@@ -3,11 +3,11 @@ import { render } from 'react-dom';
 import carfix from "./SunrisePeekTeaEstate.jpg";
 // import "./UserProfile.css";
 import "../../pages/App.css";
-import firebase from "../../config/firebase.js";
+
 
 // import axios for http request handling
 import axios from 'axios';
-
+var crypto=require('crypto');
 
 class App extends Component {
     render() {
@@ -40,6 +40,8 @@ class Register extends React.Component {
         Last_name : null,
         Address: null,
         Status:null,
+        username:null,
+        Password:null,
 
         value: '',
         errors: {
@@ -52,53 +54,21 @@ class Register extends React.Component {
         Last_name : '',
         Address: '',
         Status:'',
+        username:'',
+        Password:'',
+
           }
     };
   
-      // this.handleChange = this.handleChange.bind(this);
-      // this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange = (event) => {
       event.preventDefault();
       const { name, value } = event.target;
       let errors = this.state.errors;
   
-      switch (name) {
-        case 'Phone_number': 
-          errors.Phone_number = 
-          validEmailRegex.test(value)
-              ? 'Phone_number must be 10 characters long!'
-              : '';
-          break;
-        case 'First_name': 
-          errors.First_name = 
-          validEmailRegex.test(value)
-              ? 'Full Name must be  characters long!'
-              : '';
-          break;
-        case 'Last_name': 
-          errors.Last_name = 
-            validEmailRegex.test(value)
-              ? ''
-              : ' is not valid!';
-          break;
-        case 'Address': 
-          errors.Address = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
-          case 'Status': 
-          errors.Status = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
-
-        default:
-          break;
-      }
-  
+      
       this.setState({errors, [name]: value}); 
     }
   
@@ -108,6 +78,8 @@ class Register extends React.Component {
     
     }
     handleSubmit = (event) => {
+
+       var hashPassword=crypto.createHash('md5').update(this.state.password).digest('hex');
 
       axios({ 
         method: 'post',
@@ -120,15 +92,10 @@ class Register extends React.Component {
           clerkMobile: this.state.Phone_number,
           clerkDOB:this.state.DOB,
           clerkAddress: this.state.Address,
-          clerkStatus: 'Active'
-           
-          //  managerNIC: '100',
-          //  managerPosition:'manager',
-          //  managerName: 'srimal',
-          //  managerMobile: '0717556718',
-          //  managerDOB:'2010.02.13',
-          //  managerAddress: 'no 100',
-          //  managerStatus: 'Active'
+          clerkStatus: 'Active',
+          clerkUsername:'clerk@gmail.com',
+          clerkPassword:hashPassword,
+          
         }
   
        
@@ -139,39 +106,7 @@ class Register extends React.Component {
         console.log(error)
         alert("Clerk insertion failed" + "\n"+ error);
       });
-      // alert('A name was submitted: ' + this.state.value);
-    //   event.preventDefault();
-       
-    //   const{Phone_number,First_name,Last_name,Address,Status} = this.state;
-    //   if(Phone_number==null|| First_name==null||Last_name==null||Address==null){
-    //     alert("Please Complete all the details");
-       
-    //   }
-    //   else if(Phone_number.length!=10){
-        
-    //     alert("Wrong Phone Number");
-    //     window.location.reload();
-    //   }
-
       
-      
-    //   else{
-        
-    //   firebase.database().ref("Manager").child(Phone_number).update({
-        
-    //     First_name:First_name,
-    //     Last_name:Last_name,
-    //     Address:Address,
-    //     Status:"Active"
-      
-    //   })
-    //   alert("Manager Added");
-    //   window.location.replace("/Admin/Manager");
-      
-      
-    // }
-
-    
     }
     render() {
       const {errors} = this.state;
@@ -205,22 +140,6 @@ class Register extends React.Component {
           </div>
         </div>
       </div>
-
-      {/* <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.Position}
-              name="Position"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ Position: event.target.value })}
-              placeholder="Position" required/>
-               {errors.Position.length > 0 &&  
-                 <span className='error'>{errors.Position}</span>} 
-          </div>
-        </div>
-      </div> */}
 
           <div className="field">
         <label className="label"></label>
@@ -284,6 +203,21 @@ class Register extends React.Component {
               placeholder="Phone_number" required/>
                {errors.Phone_number.length > 0 &&  
                  <span className='error'>{errors.Phone_number}</span>} 
+          </div>
+        </div>
+      </div>
+
+      <div className="field">
+        <label className="label"></label>
+        <div className="field">
+          <div className="control">
+            <input value={this.state.password}
+              name="password"
+              className="input"
+              type="text"
+              onChange={(event) => this.setState({ password: event.target.value })}
+              placeholder="password" required/>
+              
           </div>
         </div>
       </div>

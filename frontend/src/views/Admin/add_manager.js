@@ -3,11 +3,11 @@ import { render } from 'react-dom';
 import carfix from "./SunrisePeekTeaEstate.jpg";
 // import "./UserProfile.css";
 import "../../pages/App.css";
-import firebase from "../../config/firebase.js";
+
 
 // import axios for http request handling
 import axios from 'axios';
-
+var crypto=require('crypto');
 
 class App extends Component {
     render() {
@@ -18,14 +18,6 @@ class App extends Component {
   }
   
   
-  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-const validateForm = (errors) => {
-  let valid = true;
-  Object.values(errors).forEach(
-    (val) => val.length > 0 && (valid = false)
-  );
-  return valid;
-}
 
 class Register extends React.Component {
     constructor(props) {
@@ -40,6 +32,8 @@ class Register extends React.Component {
         Last_name : null,
         Address: null,
         Status:null,
+        username:null,
+        password:null,
 
         value: '',
         errors: {
@@ -52,6 +46,8 @@ class Register extends React.Component {
         Last_name : '',
         Address: '',
         Status:'',
+        username:'',
+        password:'',
           }
     };
   
@@ -63,41 +59,7 @@ class Register extends React.Component {
       const { name, value } = event.target;
       let errors = this.state.errors;
   
-      switch (name) {
-        case 'Phone_number': 
-          errors.Phone_number = 
-          validEmailRegex.test(value)
-              ? 'Phone_number must be 10 characters long!'
-              : '';
-          break;
-        case 'First_name': 
-          errors.First_name = 
-          validEmailRegex.test(value)
-              ? 'Full Name must be  characters long!'
-              : '';
-          break;
-        case 'Last_name': 
-          errors.Last_name = 
-            validEmailRegex.test(value)
-              ? ''
-              : ' is not valid!';
-          break;
-        case 'Address': 
-          errors.Address = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
-          case 'Status': 
-          errors.Status = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
-
-        default:
-          break;
-      }
+      
   
       this.setState({errors, [name]: value}); 
     }
@@ -108,11 +70,16 @@ class Register extends React.Component {
     
     }
     handleSubmit = (event) => {
+    
+      var hashedPassword=crypto.createHash('md5').update(this.state.password).digest('hex');
+      
 
       axios({ 
         method: 'post',
         url: 'http://localhost:8000/api/manager/insert',
         data: {
+
+          
 
           managerNIC: this.state.NIC,
           managerPosition:this.state.Position,
@@ -120,22 +87,18 @@ class Register extends React.Component {
           managerMobile: this.state.Phone_number,
           managerDOB:this.state.DOB,
           managerAddress: this.state.Address,
-          managerStatus: 'Active'
+          managerStatus: 'Active',
+          managerUsername:'manager@gmail.com',
+          managerPassword:hashedPassword
            
-          //  managerNIC: '100',
-          //  managerPosition:'manager',
-          //  managerName: 'srimal',
-          //  managerMobile: '0717556718',
-          //  managerDOB:'2010.02.13',
-          //  managerAddress: 'no 100',
-          //  managerStatus: 'Active'
+        
         }
   
        
       }).then(function (response) {
         console.log(response)
         alert(response.data);
-        alert("Manager successfullt inserted");
+        
       }).catch(function (error) {
         console.log(error)
         alert("Manager insertion faild" + "\n"+ error);
@@ -285,6 +248,24 @@ class Register extends React.Component {
               placeholder="Phone_number" required/>
                {errors.Phone_number.length > 0 &&  
                  <span className='error'>{errors.Phone_number}</span>} 
+          </div>
+        </div>
+      </div>
+
+     
+
+      <div className="field">
+        <label className="label"></label>
+        <div className="field">
+          <div className="control">
+            <input value={this.state.password}
+              name="password"
+              className="input"
+              type="password"
+              onChange={(event) => this.setState({ password: event.target.value })}
+              placeholder="password" required/>
+               {errors.password.length > 0 &&  
+                 <span className='error'>{errors.password}</span>} 
           </div>
         </div>
       </div>

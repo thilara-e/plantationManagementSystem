@@ -193,7 +193,7 @@ CREATE TABLE `divisionexpenses` (
   `divNo` char(4) NOT NULL,
   `expenseID` int(11) NOT NULL,
   `descriptions` varchar(200) DEFAULT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp(),
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `amount` int(11) NOT NULL,
   `status` varchar(25) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
