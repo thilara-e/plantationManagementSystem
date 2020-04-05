@@ -667,7 +667,7 @@ SqlGenerator.prototype.fieldReplant = function(fieldReplant) {
 
 // Get all fields' areas by division
 SqlGenerator.prototype.getAllFieldAreas = function(div) {
-  var query = "SELECT * FROM field WHERE divNo ='"+div+"'";
+  var query = "SELECT field.fieldID, field.fAcres, field.fStatus, field.divNo, YEAR(fieldreplant.plantedDate) AS plantYear FROM field,fieldreplant WHERE field.divNo ='"+div+"' AND field.fieldID = fieldreplant.fieldID";
   console.log(query);
   return query;
 }
