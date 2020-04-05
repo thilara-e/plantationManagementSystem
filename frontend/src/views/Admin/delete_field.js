@@ -106,6 +106,15 @@ class Register extends React.Component {
     }
     handleSubmit = () => {
 
+     const{field_no} = this.state
+
+      if(field_no == null)
+      {
+        alert("Complete the details correctly")
+      }
+
+      else{
+
       axios.post('http://localhost:8000/api/field/delete/'+ this.state.field_no
       ).then(res => console.log(res.data)); 
 
@@ -127,7 +136,7 @@ class Register extends React.Component {
         // .then(() => alert("success"))
         // .catch(() => alert("fail"))
         
-      
+      } 
       
       
       // else(firebase.database().ref("Division").child(feild){

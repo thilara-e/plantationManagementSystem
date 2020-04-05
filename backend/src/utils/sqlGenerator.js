@@ -15,7 +15,7 @@ SqlGenerator.prototype.getDivisionByDivNo = function(divno) {
 }
 // Get field by FID query
 SqlGenerator.prototype.getFieldByFID = function(fid) {
-  var query = "SELECT * FROM division WHERE fieldID='" + fid + "'";
+  var query = "SELECT * FROM field WHERE fieldID='" + fid + "'";
   return query;
 }
 
@@ -87,12 +87,12 @@ console.log("sql generator ");
 // Insert field query
 // *** input param should be a Laborer Object (in js cannot define type)
 SqlGenerator.prototype.insertField = function(field) {
-  var query = "INSERT INTO field (fAcres,fStatus,divNo) VALUES (" + 
+  var query = "INSERT INTO field (fAcres,fStatus,divNo,plantYear) VALUES (" + 
     // "'" + field.fid + "', " +
     "'" + field.facres + "', " +
-    // "'" + division.status + "', " +
      "'" + field.status + "', " +
-    "'" + field.divno + "')";
+     "'" + field.divno + "', " +
+    "'" + field.replantation_date+ "')";
 console.log("sql generator ");
     // *** use a console.log to view query before do other things.
     console.log(query);
@@ -115,13 +115,15 @@ SqlGenerator.prototype.deleteField = function(Fid) {
 SqlGenerator.prototype.updateField = function(field) { console.log("sql query");
   var query = "UPDATE field SET" +
   " fAcres='" + field.facres + "'," +
-  " divNo='" + field.divno + "' WHERE" +
+  " divNo='" + field.divno + "',"+
+  "plantYear='"+field.replantation_date+"' WHERE" +
   " fieldID='" + field.fid + "'";
     
     // *** use a console.log to view query before do other things.
      console.log(query);
   return query;
 }
+
 
 
 
@@ -722,8 +724,8 @@ SqlGenerator.prototype.updateConductor = function(conductor) {
 }
 
 // Delete conductor by NIC query
-SqlGenerator.prototype.deleteConductorByNIC = function(nic) {
-  var query = "UPDATE staff SET sStatus='deleted' WHERE mobileNo='" + nic + "'";
+SqlGenerator.prototype.deleteConductor = function(nic) {
+  var query = "UPDATE staff SET sStatus='deleted' WHERE sNIC='" + nic + "'";
   console.log(query);
   return query;
 }
@@ -752,7 +754,25 @@ SqlGenerator.prototype.updateClerk = function(clerk) {
   return query;
 }
 
+SqlGenerator.prototype.getManagerBysNIC = function(mobile_no) {
+  var query = "SELECT sNIC,sPosition,sName,sMobile,sDOB,sAddress,sStatus FROM staff WHERE sMobile = '" + mobile_no + "' AND sPosition='manager'";
 
+  console.log(query);
+  return query;
+}
+
+SqlGenerator.prototype.updateManager = function(manager) {
+  var query = "UPDATE staff SET" +
+    " sNIC='" + manager.nic + "'," +
+    " sName='" + manager.name + "'," +
+    " sAddress='" + manager.address + "'," +
+    " sDOB='" + manager.dob + "' WHERE" +
+    " smobile='" + manager.mobile + "'";
+    
+    // *** use a console.log to view query before do other things.
+     console.log(query);
+  return query;
+}
 
 
 

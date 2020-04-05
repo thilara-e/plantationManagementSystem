@@ -107,7 +107,14 @@ class Register extends React.Component {
     }
     handleSubmit = () => {
 
-      
+      const{div_no,Div_location} =this.state
+
+      if(div_no == null || Div_location ==null) {
+
+        alert("Plese complete all the details");
+      }
+
+     else{
         console.log("submit");
         // console.log("nic"+this.state.Phone_number);
  // -----------------------------------------------------------
@@ -169,7 +176,7 @@ class Register extends React.Component {
       //   })
 
       // }
-
+     }
       console.log('xxxxx',axios);
   }
 

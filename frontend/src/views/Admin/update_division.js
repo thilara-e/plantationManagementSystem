@@ -135,6 +135,15 @@ class Register extends React.Component {
       this.setState({ [event.target.name]: event.target.value });
     };
     handleLoad = async (e) => {
+
+      const{Division_no} =this.state
+
+      if(Division_no == null) {
+
+        alert("Plese complete the details correctly");
+      }
+
+      else{
       localStorage.setItem('divisionUpdate', this.state.Division_no);
       console.log(localStorage.getItem('divisionUpdate'));
       this.setState({Ready:true});
@@ -151,13 +160,25 @@ class Register extends React.Component {
          console.log(error);
        });
    console.log(this.state.Ready);
+
+      }
     }
  handleBack = () => {
       window.location.replace("/Admin/Division");
     
     }
     handleSubmit = () => {
+
+
+      const{Division_no,Location} =this.state
+
+      if(Division_no == null || Location == null) {
+
+        alert("Plese complete all the details");
+      }
      
+      else
+      {
       axios({
         method: 'post',
         url: 'http://localhost:8000/api/division/update',
@@ -174,7 +195,7 @@ class Register extends React.Component {
         alert("Data Updation failed" + "\n"+ error);
       });
 
-
+      }
 
       // event.preventDefault();
       // const{Division_no,search_Division_no,conductor,conductor_name,conductor_id,no_of_feild} = this.state;

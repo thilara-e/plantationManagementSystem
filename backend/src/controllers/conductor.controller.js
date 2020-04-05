@@ -1,5 +1,6 @@
 // Import required packages
-var Conductor = require("../models/manager.model");
+var Conductor = require("../models/conductor.model");
+var Manager = require("../models/manager.model");
 var SqlGenerator = require("../utils/sqlGenerator");
 var connection = require("../utils/connection");
 
@@ -64,50 +65,6 @@ ConductorController.prototype.getAllConductors = function(callback) {
   });
 };
 
-
-ConductorController.prototype.insertConductortostaff = function(reqBody, callback) {
-  console.log("controlller insert");
-  connection.beginTransaction(function(err) {
-    if (err) {
-      callback(null, err);
-    }
-
-    // *** request should contain below keys exactly as it is.
-    var staff = new Conductor(
-      reqBody.conductorNIC,
-      reqBody.conductorPosition,
-      reqBody.conductorName,
-      reqBody.conductorMobile,
-      reqBody.conductorDOB,
-      reqBody.conductorAddress,
-      reqBody.conductorStatus,
-     
-    );
-
-    var sqlQuery = sqlGenerator.insertConductortostaff(staff);
-
-    sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
-      if (err) {
-        connection.rollback();
-        callback(null, err);
-      } else {
-        connection.commit(function(err) {
-          if (err) {
-            connection.rollback();
-            callback(null, err);
-          }
-          console.log("Transaction Complete.");
-          callback("Conductor successfully inserted into the system!");
-        });
-      }
-    }
-    
-    );
-
-    
-
-  });
-};
 
 // Insert conductor to DB
 ConductorController.prototype.insertConductor = function(reqBody, callback) {
@@ -201,7 +158,6 @@ console.log(sqlQuery);
 
 
 
-
 //Update conductor in DB
 ConductorController.prototype.updateConductor = function(reqBody, callback) {
   connection.beginTransaction(function(err) {
@@ -217,11 +173,11 @@ ConductorController.prototype.updateConductor = function(reqBody, callback) {
       reqBody.staffMobileNo, 
       'null',
       reqBody.staffAddress,
-     
-      reqBody.staffUsername,
-      reqBody.staffDiv,
+      
+      // reqBody.staffUsername,
+      // reqBody.staffDiv,
     );
-
+   console.log(conductor);
     var sqlQuery = sqlGenerator.updateConductor(conductor);
 
     sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
@@ -245,76 +201,36 @@ ConductorController.prototype.updateConductor = function(reqBody, callback) {
   });
 };
 
-// Delete conductor by NIC
-ConductorController.prototype.deleteConductorByNIC = function(nic, callback) {
-  var sqlQuery = sqlGenerator.deleteConductorByNIC(nic);
-
-  connection.query(sqlQuery, function(err, resultLaborer) {
+// Delete laborer in DB
+ConductorController.prototype.deleteConductor = function(nic, callback) {
+  console.log("controller");
+  connection.beginTransaction(function(err) {
     if (err) {
       callback(null, err);
-    } else if (resultLaborer.affectedRows == 0) {
-      callback("Conductor doesn't exist for the given NIC.");
-    } else {
-      callback("Conductor successfully deleted from the system!");
     }
+
+    var sqlQuery = sqlGenerator.deleteConductor(nic);
+console.log(sqlQuery);
+    sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
+      if (err) {
+        connection.rollback();
+        callback(null, err);
+      } else if (result.affectedRows == 0) {
+        connection.rollback();
+        callback("conductor doesn't exist for the given nic.");
+      } else {
+        connection.commit(function(err) {
+          if (err) {
+            connection.rollback();
+            callback(null, err);
+          }
+          console.log("Transaction Complete.");
+          callback("Conductor successfully deleted from the system!");
+        });
+      }
+    });
   });
-
- 
 };
-
-// Update laborer in DB
-// LaborerController.prototype.updateLaborer = function(reqBody, callback) {
-//   connection.beginTransaction(function(err) {
-//     if (err) {
-//       callback(null, err);
-//     }
-
-//     // *** request should contain below keys exactly as it is.
-//     var laborer = new Laborer(
-//       reqBody.laborerNIC,
-//       reqBody.laborerName,
-//       reqBody.laborerAddress,
-//       reqBody.laborerMobileNo,  
-//       reqBody.laborerStatus
-//     );
-
-//     var sqlQuery = sqlGenerator.updateLaborer(laborer);
-
-//     sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
-//       if (err) {
-//         connection.rollback();
-//         callback(null, err);
-//       } else if (result.affectedRows == 0) {
-//         connection.rollback();
-//         callback("Laborer doesn't exist for the given NIC.");
-//       } else {
-//         connection.commit(function(err) {
-//           if (err) {
-//             connection.rollback();
-//             callback(null, err);
-//           }
-//           console.log("Transaction Complete.");
-//           callback("Laborer successfully updated in the system!");
-//         });
-//       }
-//     });
-//   });
-// };
-
-// // Delete laborer by NIC
-// LaborerController.prototype.deleteLaborerByNIC = function(nic, callback) {
-//   var sqlQuery = sqlGenerator.deleteLaborerByNIC(nic);
-
-//   connection.query(sqlQuery, function(err, resultLaborer) {
-//     if (err) {
-//       callback(null, err);
-//     } else if (resultLaborer.affectedRows == 0) {
-//       callback("Laborer doesn't exist for the given NIC.");
-//     } else {
-//       callback("Laborer successfully deleted from the system!");
-//     }
-//   });
-// };
 
 // Export laborer controller
 module.exports = ConductorController;

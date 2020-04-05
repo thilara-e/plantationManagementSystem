@@ -44,6 +44,14 @@ class App extends Component {
     }
 
     handleSubmit = () => {
+      const{NIC} = this.state
+
+      if(NIC == null){
+
+        alert("complete the details correctly");
+      }
+
+      else{
 
       axios.post('http://localhost:8000/api/manager/delete/'+ this.state.NIC
       ).then(res => console.log(res.data)); 
@@ -76,7 +84,7 @@ class App extends Component {
       
         
       // }
-     
+      }
       
       }
 

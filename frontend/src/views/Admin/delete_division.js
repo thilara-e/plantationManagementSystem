@@ -101,6 +101,16 @@ class Register extends React.Component {
     
     }
     handleSubmit = () => {
+
+      const{Division_no} = this.state
+
+      if(Division_no == null)
+      {
+        alert("Please complete the details correctly");
+
+      }
+
+      else{
       
       axios.post('http://localhost:8000/api/division/delete/'+ this.state.Division_no
       ).then(res => console.log(res.data)); 
@@ -127,7 +137,7 @@ class Register extends React.Component {
         // .catch(() => alert("fail"))
         
       
-      
+      } 
   }
 
   

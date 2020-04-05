@@ -110,7 +110,15 @@ class Register extends React.Component {
     
     }
     handleSubmit = () => {
+    
+      const{Division_no,Acres} = this.state;
+      
+      if(Division_no == null || Acres == null ){
+        alert("please complete details");
+       }
 
+       else{
+ 
 
       console.log("submit");
       // console.log("nic"+this.state.Phone_number);
@@ -133,7 +141,7 @@ axios({
     fieldAcres:this.state.Acres,
     fieldStatus : 'Active',
     fieldDivNo :this.state.Division_no,
-    
+    replantation_date:this.state.replantation_date
    
 
   
@@ -145,7 +153,7 @@ axios({
  console.log(error)
  alert("Field insertion failed" + "\n"+ error);
 });
-     
+}   
       // const{Division_no,Acres,field_id,crop_type,replantation_date,status} = this.state;
      
       
@@ -236,6 +244,23 @@ axios({
               placeholder="Acres" required/>
                {errors.Acres.length > 0 &&  
                  <span className='error'>{errors.Acres}</span>} 
+          </div>
+        </div>
+      </div>
+
+
+      <div className="field">
+        <label className="label"></label>
+        <div className="field">
+          <div className="control">
+            <input value={this.state.replantation_date}
+              name="Acres"
+              className="input"
+              type="text"
+              onChange={(event) => this.setState({ replantation_date: event.target.value })}
+              placeholder="replantation_date" required/>
+               {errors.replantation_date.length > 0 &&  
+                 <span className='error'>{errors.replantation_date}</span>} 
           </div>
         </div>
       </div>

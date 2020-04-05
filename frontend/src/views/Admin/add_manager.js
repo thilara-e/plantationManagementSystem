@@ -70,7 +70,20 @@ class Register extends React.Component {
     
     }
     handleSubmit = (event) => {
-    
+
+      const{NIC,Position,Name,Phone_number,DOB,Address,password } = this.state
+
+      if(NIC == null || Position == null || Name == null || Phone_number == null || DOB == null || Address == null || password == null)
+
+      {
+
+        alert("Please complete the details corrrectly");
+
+      }
+
+      else{
+      
+      
       var hashedPassword=crypto.createHash('md5').update(this.state.password).digest('hex');
       
 
@@ -135,7 +148,7 @@ class Register extends React.Component {
       
     // }
 
-    
+      }
     }
     render() {
       const {errors} = this.state;

@@ -13,6 +13,7 @@ function FieldController() {}
 FieldController.prototype.getFieldByFID = function(FID, callback) {console.log("getfieldbyfid");
   var sqlQuery = sqlGenerator.getFieldByFID(FID);
 
+  console.log(sqlQuery);
   connection.query(sqlQuery, function(err, resultField) {
     if (err) {
       callback(null, err);
@@ -24,9 +25,12 @@ FieldController.prototype.getFieldByFID = function(FID, callback) {console.log("
         resultField[0].fieldID,
         resultField[0].divNo,
         resultField[0].fAcres,
-        resultField[0].fStatus, 
+        resultField[0].fStatus,
+        resultField[0].plantYear
       );
       callback(field);
+
+      console.log(field)
     }
   });
 };
@@ -70,7 +74,9 @@ FieldController.prototype.insertField = function(reqBody, callback) {
       reqBody.fieldFID,
       reqBody.fieldDivNo, 
       reqBody.fieldAcres,
-      reqBody.fieldStatus
+      reqBody.fieldStatus,
+      reqBody.replantation_date
+      
     );
     console.log(field);
     var sqlQuery = sqlGenerator.insertField(field);
@@ -106,9 +112,11 @@ FieldController.prototype.insertField = function(reqBody, callback) {
       reqBody.fieldFID,
       reqBody.fieldDivNo, 
       reqBody.fieldAcres,
-      reqBody.fieldStatus
-      
+      reqBody.fieldStatus,
+      reqBody.replantation_date
     );
+
+    console.log(field);
     var sqlQuery = sqlGenerator.updateField(field);
 
     sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {

@@ -1,17 +1,11 @@
 import React, {Component} from "react";
-import "./App.css";
+ import "./App.css";
 import { render } from 'react-dom';
 import carfix from "./SunrisePeekTeaEstate.jpg";
 
 import axios from 'axios';
 
-//import DatePicker from "react-datepicker";
- 
-//date input
-//import "react-datepicker/dist/react-datepicker.css";
 
-//dropdown
-//import ControlledOpenSelect from "../isuru-components/dropdown-button2.js"
 
 
 class App extends Component {
@@ -23,13 +17,7 @@ class App extends Component {
   }
 }
 
-const validateForm = (errors) => {
-  let valid = true;
-  Object.values(errors).forEach(
-    (val) => val.length > 0 && (valid = false)
-  );
-  return valid;
-}
+
 
 class Register extends Component{
     constructor(props) {
@@ -60,22 +48,38 @@ class Register extends Component{
         this.setState({Ready:true});
         axios.get('http://localhost:8000/api/conductor/get/'+localStorage.getItem('conductorUpdate')).then(response=>{
           this.setState({nic:response.data['nic']});
+
+          if(!response.data['nic']){
+            alert("conductor doesn't exists");
+          }
+
+          else{
+
           this.setState({phoneNo:response.data['mobile']});
           this.setState({name:response.data['name']});
           this.setState({address:response.data['address']});
-          this.setState({username:response.data['username']});
-          this.setState({divNo:response.data['divno']});
+          // this.setState({username:response.data['username']});
+          
        
-          console.log(response.data);
-          console.log(this.state.Ready);
-          //this.setNewEndDate();
+          }
+         
          }).catch(function(error){
            console.log(error);
          });
-     console.log(this.state.Ready);
+         
+     
       }
 
       handleSubmit = () => {
+        
+        const{name,address,username,phoneNo,divNo,} = this.state;
+
+        if(name == null || address == null || username == null || phoneNo == null || phoneNo.length != 10  ||divNo == null)
+        {
+          alert("please complete details correctly");
+        }
+
+        else{
         
         axios({
           method: 'post',
@@ -96,8 +100,13 @@ class Register extends Component{
           alert("Data Updation failed" + "\n"+ error);
         });
         //window.location.replace("/updateLaborer");
-   
+      }  console.log(username);
+
+        
+
       };
+
+      
      
   render() {
     const { nic, error } = this.state;
@@ -209,40 +218,8 @@ class Register extends Component{
         </div>
       </div>
       : null}
-       {this.state.Ready ?
-        <div className="field">
-        <p >Username</p>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.username}
-              name="amount"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ username: event.target.value })}
-              placeholder={this.state.username} required/>
-              {/* {errors.amount.length > 0 && 
-                <span className='error'>{errors.amount}</span>} */}
-          </div>
-        </div>
-      </div>
-      : null}
-         {this.state.Ready ?
-        <div className="field">
-        <p >Division No</p>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.divNo}
-              name="amount"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ divNo: event.target.value })}
-              placeholder={this.state.divNo} required/>
-              {/* {errors.amount.length > 0 && 
-                <span className='error'>{errors.amount}</span>} */}
-          </div>
-        </div>
-      </div>
-      : null}
+       
+       
       {this.state.Ready ?
         <button disabled={isInvalid} type="submit" onClick={this.handleSubmit}>
           Update

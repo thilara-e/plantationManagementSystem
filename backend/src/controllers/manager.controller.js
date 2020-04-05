@@ -91,11 +91,13 @@ ManagerController.prototype.insertManager = function(reqBody, callback) {
       if (err) {
         connection.rollback();
         callback(null, err);
+        console.log("err");
       } else {
         connection.commit(function(err) {
           if (err) {
             connection.rollback();
             callback(null, err);
+            console.log("no error");
           }
           console.log("Transaction Complete.");
           callback("Manager successfully inserted into the system!");
@@ -104,6 +106,49 @@ ManagerController.prototype.insertManager = function(reqBody, callback) {
     });
   });
 };
+
+
+ManagerController.prototype.updateManager = function(reqBody, callback) {
+  console.log("update");
+connection.beginTransaction(function(err) {
+  if (err) {
+    callback(null, err);
+  }
+
+  // *** request should contain below keys exactly as it is.
+  var manager = new Manager(
+      reqBody.managerNIC,
+      "manager",
+      reqBody.managerName,
+      reqBody.managerMobile,
+      reqBody.managerDOB,
+      reqBody.managerAddress,
+      "Active"
+  );
+     console.log(manager);
+  var sqlQuery = sqlGenerator.updateManager(manager);
+
+  sqlGenerator.executeSql(connection, sqlQuery, function(result, err) {
+    if (err) {
+      connection.rollback();
+      callback(null, err);
+    } else if (result.affectedRows == 0) {
+      connection.rollback();
+      callback("Laborer doesn't exist for the given NIC.");
+    } else {
+      connection.commit(function(err) {
+        if (err) {
+          connection.rollback();
+          callback(null, err);
+        }
+        console.log("Transaction Complete.");
+        callback("Clerk successfully updated in the system!");
+      });
+    }
+  });
+});
+};
+
 
 
 // Update laborer in DB

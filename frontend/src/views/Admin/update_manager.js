@@ -1,305 +1,316 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, { Component } from "react";
+// import "./App.css";
+import "./App.css";
+import { render } from "react-dom";
 import carfix from "./SunrisePeekTeaEstate.jpg";
-// import "./UserProfile.css";
-import "../../pages/App.css";
-import firebase from "../../config/firebase.js";
-import { firestore } from 'firebase';
 
+import axios from "axios";
+
+//import DatePicker from "react-datepicker";
+
+//date input
+//import "react-datepicker/dist/react-datepicker.css";
+
+//dropdown
+//import ControlledOpenSelect from "../isuru-components/dropdown-button2.js"
 
 class App extends Component {
-    render() {
-      return (
-        <Register />
-      );
-    }
+  render() {
+    return <Register />;
   }
-  
-  
-  const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-const validateForm = (errors) => {
-  let valid = true;
-  Object.values(errors).forEach(
-    (val) => val.length > 0 && (valid = false)
-  );
-  return valid;
 }
 
-class Register extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        Labourer:null,
-        Phone_number:null,
-        First_name: null,
-        Last_name : null,
-        Address: null,
-        Status:null,
-        loaded:false,
+const validateForm = errors => {
+  let valid = true;
+  Object.values(errors).forEach(val => val.length > 0 && (valid = false));
+  return valid;
+};
 
-        value: '',
-        errors: {
-        Labourer:'',
-        search_phone_number:'',
-        Phone_number:'',
-        First_name: '',
-        Last_name : '',
-        Address: '',
-        Status:'',
-          }
+class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      phoneNo: "",
+      mobile: "",
+      nic: "-",
+      name: "-",
+      dob: "YYYY-MM-DD",
+      address: "-",
+      Ready: false,
+      error: null,
+      tempPhone: ""
     };
+  }
+
+  handleBack = () => {
+    window.location.replace("/Admin/manager");
   
-      // this.handleChange = this.handleChange.bind(this);
-      // this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleChange = (event) => {
-      event.preventDefault();
-      const { name, value } = event.target;
-      let errors = this.state.errors;
-  
-      switch (name) {
-        case 'Phone_number': 
-          errors.Phone_number = 
-          validEmailRegex.test(value)
-              ? 'Phone_number must be 10 characters long!'
-              : '';
-          break;
-        case 'First_name': 
-          errors.First_name = 
-          validEmailRegex.test(value)
-              ? 'Full Name must be  characters long!'
-              : '';
-          break;
-        case 'Last_name': 
-          errors.Last_name = 
-            validEmailRegex.test(value)
-              ? ''
-              : ' is not valid!';
-          break;
-        case 'Address': 
-          errors.Address = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
-          case 'Status': 
-          errors.Status = 
-          validEmailRegex.test(value)
-              ? 'Password must be 8 characters long!'
-              : '';
-          break;
+  }
 
-        default:
-          break;
-      }
-  
-      this.setState({errors, [name]: value});
-    }
-  
-     
-    handleBack = () => {
-      window.location.replace("/Admin/Manager");
-    
-    
-    }
-    
-     handleLoad = (event)  =>{
-       event.preventDefault();
-       const search_phone_number = this.state.search_phone_number;
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+  handleLoad = async (e) => {
 
-       firebase.database().ref('Manager').child(search_phone_number).once('value',(snapshot) => {
-         if(snapshot.exists()){
-         this.setState({
-           Phone_number: search_phone_number,
-           First_name  : snapshot.val().First_name,
-           Last_name   : snapshot.val().Last_name,
-           Address     : snapshot.val().Address,
-           loaded      : true,
+    const{phoneNo} = this.state
 
-         })
-         }
-         else{
-           alert('User not exist.')
-         }
-       })
-     }
-
-    handleSubmit = (event) => {
-      // alert('A name was submitted: ' + this.state.value);
-      event.preventDefault();
-       
-      const{search_phone_number,Phone_number,First_name,Last_name,Address,Status} = this.state;
-      if(Phone_number==null|| First_name==null||Last_name==null||Address==null){
-        alert("Please Complete all the details");
-       
-      }
-      else if(Phone_number.length!=10){
-        
-        alert("Wrong Phone Number");
-        window.location.reload();
-      }
-
+    if (phoneNo == null)
+    {
+      alert("complete the details correctlly")
       
-      
-      else{
-        if(search_phone_number!==Phone_number){
-          firestore.database().ref("Manager").child(search_phone_number).remove();
+    }
+
+    else{
+    // localStorage.setItem('laborerUpdate', this.state.phoneNo);
+    // console.log(localStorage.getItem('laborerUpdate'));
+    console.log(this.state.phoneNo);
+    await this.setState({ tempPhone: this.state.phoneNo });
+    console.log(this.state.tempPhone);
+
+    this.setState({ Ready: true });
+    await axios
+      .get("http://localhost:8000/api/manager/get/" + this.state.tempPhone)
+      .then(response => {
+        console.log(response.data);
+        if (response.data["mobile"]) {
+          //this.setState({ Ready: true });
+          this.setState({ nic: response.data["nic"] });
+          this.setState({ mobile: response.data["mobile"] });
+          this.setState({ name: response.data["name"] });
+          this.setState({ dob: response.data["dob"] });
+          this.setState({ address: response.data["address"] });
+        } else {
+          alert("Please insert an existing manager");
+          this.setState({ Ready: false });
+          console.log(response.data);
+          console.log("no data");
         }
-      firebase.database().ref("Manager").child(Phone_number).update({
-        
-        First_name:First_name,
-        Last_name:Last_name,
-        Address:Address,
-        Status:"Active"
-      
+        console.log(response.data);
+        console.log(this.state.Ready);
+        //this.setNewEndDate();
       })
-      .then(() => {
-        this.setState({
-          search_phone_number:'',
-          First_name:'',
-          Last_name:'',
-          Address:'',
-          loaded:false,
-        })
-        alert("Manager updated");
-        window.location.replace("/Admin/Manager");
-      })
-     
-      // .then(() => alert("success"))
-      // .catch(() => alert("fail"))
-      
-    }
-
+      .catch(function(error) {
+        console.log(error);
+      });
+    console.log(this.state.Ready);
+  }
+  }
+  handleSubmit = () => {
     
-    }
-    render() {
-      const {errors} = this.state;
-      return (
-        <div
+        
+    const{nic,name,address,tempPhone,dob} = this.state
+
+    if(nic == null ||
+       name == null ||
+       address == null ||
+       dob == null ||
+       tempPhone == null 
+      )
+
+      {
+        alert("Plese complete the details correrctly");
+
+      }
+
+
+      else{
+
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/manager/update",
+      data: {
+        managerNIC: this.state.nic,
+        managerName: this.state.name,
+        managerAddress: this.state.address,
+        managerMobile: this.state.tempPhone,
+        managerDOB: this.state.dob,
+        clerkStatus: "Active"
+      }
+    })
+      .then(function(response) {
+        console.log(response);
+        alert("Workassign recorded" + "\n" + response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+        alert("Data Updation failed" + "\n" + error);
+      });
+    //window.location.replace("/updateLaborer");
+
+      }
+  };
+
+  render() {
+    const { phoneNo, error } = this.state;
+    //const isInvalid =phoneNo === '';
+    const isInvalid = phoneNo.length != 10;
+    return (
+      <div
         className="App"
         style={{
           backgroundImage: `linear-gradient(0deg,rgba(20,100,20,0.5), rgba(9, 93, 225, 0.0)),url(${carfix})`
-        }}>
-            <div className='submit'>
+        }}
+      > 
+        <div className='submit'>
               <button onClick={this.handleBack}>Back</button>
             </div>
         <div className="wrapper">
-        
-        <h2 className="heading">Update Manager</h2>
-        
-        <form name="myForm" >
-        
-        <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.Phone_number}
-              name="Phone_number"
-              className="input"
-              type="text"
-              onChange={this.state.loaded ? (event) => this.setState({ Phone_number: event.target.value }):
-                                            (event) => this.setState({ search_phone_number: event.target.value})}
-              placeholder="Phone_number" required/>
-               {errors.Phone_number.length > 0 &&  
-                 <span className='error'>{errors.Phone_number}</span>} 
-          </div>
-        </div>
-      </div> 
-       
-      {this.state.loaded ? 
-          <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.First_name}
-              name="First_name"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ First_name: event.target.value })}
-              placeholder="First_name" required/>
-               {errors.First_name.length > 0 &&  
-                 <span className='error'>{errors.First_name}</span>} 
-          </div>
-        </div>
-      </div>
-     : null}  
-      
-    {this.state.loaded ? 
-      <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.Last_name}
-              name="Last_name"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ Last_name: event.target.value })}
-              placeholder="Last_name" required/>
-               {errors.Last_name.length > 0 &&  
-                 <span className='error'>{errors.Last_name}</span>} 
-          </div>
-        </div>
-      </div>
-    : null}
-      
-     
-      
-      
-      {this.state.loaded ? 
-      <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.Address}
-              name="Address"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ Address: event.target.value })}
-              placeholder="Address" required/>
-               {errors.Address.length > 0 &&  
-                 <span className='error'>{errors.Address}</span>} 
-          </div>
-        </div>
-      </div>
-      : null}
-       
-      {this.state.loaded ?
-       <div className="field">
-        <label className="label"></label>
-        <div className="field">
-          <div className="control">
-            <input value={this.state.Status}
-              name="Status"
-              className="input"
-              type="text"
-              onChange={(event) => this.setState({ Status: event.target.value })}
-              placeholder="Status" required/>
-               {errors.Address.length > 0 &&  
-                 <span className='error'>{errors.Status}</span>} 
-          </div>
-        </div>
-      </div>
-      : null}
+          <h2 className="heading">Update Manager</h2>
 
-      {!this.state.loaded ?
-         <div className='submit'>
-              <button onClick={this.handleLoad}>Load</button>
-            </div>
-      : null}
+          <form onSubmit={this.onSubmit}>
+            {!this.state.Ready ? (
+              <div classname="input">
+                <input
+                  className="input"
+                  name="phoneNo"
+                  value={phoneNo}
+                  onChange={this.onChange}
+                  type="text"
+                  placeholder="Phone No"
+                />
+              </div>
+            ) : null}
+            {!this.state.Ready ? (
+              <button
+                disabled={isInvalid}
+                //type="submit"
+                onClick={this.handleLoad}
+              >
+                Select
+              </button>
+            ) : null}
 
-      {this.state.loaded ?
-         <div className='submit'>
+            {error && <p>{error.message}</p>}
+
+            {this.state.Ready ? (
+              <div className="field">
+                <p>NIC</p>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      value={this.state.nic}
+                      name="amount"
+                      className="input"
+                      type="text"
+                      onChange={event =>
+                        this.setState({ nic: event.target.value })
+                      }
+                      placeholder={this.state.nic}
+                      required
+                    />
+                    {/* {errors.amount.length > 0 && 
+                <span className='error'>{errors.amount}</span>} */}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.Ready ? (
+              <div className="field">
+                <p>Mobile Number</p>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      value={this.state.phoneNo}
+                      name="amount"
+                      className="input"
+                      type="text"
+                      onChange={event =>
+                        this.setState({ phoneNo: event.target.value })
+                      }
+                      placeholder={this.state.phoneNo}
+                      required
+                    />
+                    {/* {errors.amount.length > 0 && 
+                <span className='error'>{errors.amount}</span>} */}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.Ready ? (
+              <div className="field">
+                <p>Name</p>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      value={this.state.name}
+                      name="amount"
+                      className="input"
+                      type="text"
+                      onChange={event =>
+                        this.setState({ name: event.target.value })
+                      }
+                      placeholder={this.state.name}
+                      required
+                    />
+                    {/* {errors.amount.length > 0 && 
+                <span className='error'>{errors.amount}</span>} */}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.Ready ? (
+              <div className="field">
+                <p>Date of Birth</p>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      value={this.state.dob}
+                      name="amount"
+                      className="input"
+                      type="text"
+                      onChange={event =>
+                        this.setState({ dob: event.target.value })
+                      }
+                      placeholder={this.state.dob}
+                      required
+                    />
+                    {/* {errors.amount.length > 0 && 
+                <span className='error'>{errors.amount}</span>} */}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {this.state.Ready ? (
+              <div className="field">
+                <p>Address</p>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      value={this.state.address}
+                      name="amount"
+                      className="input"
+                      type="text"
+                      onChange={event =>
+                        this.setState({ address: event.target.value })
+                      }
+                      placeholder={this.state.address}
+                      required
+                    />
+                    {/* {errors.amount.length > 0 && 
+                <span className='error'>{errors.amount}</span>} */}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+       {this.state.Ready ?
+      <div className='submit'>
+              <button onClick={this.handleSubmit}>Update</button>
+       </div>
+       : null}
+          </form>
+
+          {/* <div className='submit'>
               <button onClick={this.handleSubmit}>Submit</button>
             </div>
-      : null}
+  
 
-        </form>
-        </div>>
+      
+      </form> */}
         </div>
-        
-      );
-    }
+      </div>
+    );
   }
-
-  render(<App/>, document.getElementById('root'))
- export default App;
+}
+render(<App />, document.getElementById("root"));
+export default App;

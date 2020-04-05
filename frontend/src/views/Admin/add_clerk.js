@@ -74,10 +74,22 @@ class Register extends React.Component {
   
     
     handleBack = () => {
-      window.location.replace("/Admin/Manager");
+      window.location.replace("/Admin/Clerk");
     
     }
     handleSubmit = (event) => {
+
+      const{NIC,Name,Phone_number,DOB,Address,Password} = this.state
+
+      if(NIC == null || Name == null || Phone_number == null || DOB==null || Address == null || Password == null)
+
+      {
+          alert("complete the details correctlly")
+
+      }
+          else{
+
+          
 
        var hashPassword=crypto.createHash('md5').update(this.state.password).digest('hex');
 
@@ -106,7 +118,7 @@ class Register extends React.Component {
         console.log(error)
         alert("Clerk insertion failed" + "\n"+ error);
       });
-      
+    } 
     }
     render() {
       const {errors} = this.state;

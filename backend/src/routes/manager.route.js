@@ -46,7 +46,8 @@ router.post("/insert", function(req, res, next) {
 });
 
 // PUT Route - Update a mnager
-router.put("/update", function(req, res, next) {
+router.post("/update", function(req, res, next) {
+  console.log("router update")
   managerController.updateManager(req.body, function(result, err) {
     if (err) {
       res.status(404);

@@ -42,6 +42,11 @@ class Register extends Component {
     };
   }
 
+  handleBack = () => {
+    window.location.replace("/Admin/Clerk");
+  
+  }
+
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -114,7 +119,10 @@ class Register extends Component {
         style={{
           backgroundImage: `linear-gradient(0deg,rgba(20,100,20,0.5), rgba(9, 93, 225, 0.0)),url(${carfix})`
         }}
-      >
+      > 
+        <div className='submit'>
+              <button onClick={this.handleBack}>Back</button>
+            </div>
         <div className="wrapper">
           <h2 className="heading">Update Clerk</h2>
 
